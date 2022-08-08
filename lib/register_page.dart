@@ -15,38 +15,33 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterStatePage extends State<RegisterPage> {
   final _formEmail = GlobalKey<FormState>();
-  final _formMobitel = GlobalKey<FormState>();
   final _formPassword = GlobalKey<FormState>();
   final _formConfirmPass = GlobalKey<FormState>();
   bool _isValidEmail = false;
-  bool _isValidMobitel = false;
   bool _isValidPassword = false;
   bool _isValidConfirmPass = false;
 
   // text controller
   final emailController = TextEditingController();
-  final mobitelController= TextEditingController();
   final passController = TextEditingController();
   final confirmPassController = TextEditingController();
 
   void _saveForm() {
     setState(() {
       _isValidEmail = _formEmail.currentState!.validate();
-      _isValidMobitel = _formEmail.currentState!.validate();
       _isValidPassword = _formPassword.currentState!.validate();
       _isValidConfirmPass= _formConfirmPass.currentState!.validate();
 
-      if (_isValidEmail && _isValidMobitel && _isValidPassword && _isValidConfirmPass) {
+      if (_isValidEmail && _isValidPassword && _isValidConfirmPass) {
         register();
       }
     });
   }
 
   Future register() async {
-    var url = Uri.parse("http://192.168.5.12/registracija.php");
+    var url = Uri.parse("http://192.168.5.15/registracija.php");
     var response = await http.post(url, body: {
       "email" : emailController.text.trim(),
-      "mobitel": mobitelController.text.trim(),
       "password" : passController.text.trim(),
     });
 
@@ -84,7 +79,6 @@ class _RegisterStatePage extends State<RegisterPage> {
   @override
   void dispose() {
     emailController.dispose();
-    mobitelController.dispose();
     passController.dispose();
     confirmPassController.dispose();
     super.dispose();
@@ -147,42 +141,6 @@ class _RegisterStatePage extends State<RegisterPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                       hintText: 'Email',
-                      fillColor: Colors.grey[200],
-                      filled: true,
-                    ),  
-                  ),
-                ),
-              ),
-                
-              SizedBox(height: 10),
-
-              // mobitel textfield
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Form(
-                  key: _formMobitel,
-                  child: TextFormField(
-                    controller: mobitelController,
-                    keyboardType: TextInputType.number,
-                    autocorrect: false,
-                    textCapitalization: TextCapitalization.none,
-                    validator: (mobitel) {
-                      if (mobitel == null || mobitel.isEmpty) {
-                        return 'Ovo polje je obavezno';
-                      }  
-                
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.deepPurple),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                      hintText: 'Mobitel',
                       fillColor: Colors.grey[200],
                       filled: true,
                     ),  

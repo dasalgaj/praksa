@@ -36,7 +36,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String? verifyLink;
 
   Future checkUser() async {
-    var url = Uri.parse("http://192.168.5.12/check_email.php");
+    var url = Uri.parse("http://192.168.5.15/check_email.php");
     var response = await http.post(url, body: {
       "email" : emailController.text.trim()
     }

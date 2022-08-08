@@ -1,12 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:praksa_zadatak/api/google_signin_api.dart';
 import 'login_page.dart';
-import 'changePass_page.dart';
 
-class MainPage extends StatelessWidget {
-  final String email;
-  final String password;
-  const MainPage({Key? key, required this.email, required this.password}) : super(key: key);
+class GoogleMainPage extends StatelessWidget {
+  final GoogleSignInAccount user;
+
+  const GoogleMainPage({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,9 @@ class MainPage extends StatelessWidget {
                   
                   // sign out button
                   RawMaterialButton(
-                    onPressed:() {
+                    onPressed:() async {
+                      await GoogleSignInApi.logout();
+
                       Navigator.pushAndRemoveUntil<dynamic>(
                             context,
                             MaterialPageRoute<dynamic>(
@@ -59,47 +62,12 @@ class MainPage extends StatelessWidget {
               ),
 
               Text(
-                    email,
+                    user.email,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 20,
                     ),
                   ),
-
-              SizedBox(height: 40),
-
-              // change password button
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 70.0),
-                child: GestureDetector(
-                  onTap:() {
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute<dynamic>(
-                              builder: (
-                                (context) => ChangePassPage(changeEmail: email, changePass: password)
-                                ),
-                            ),
-                          );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple,
-                      borderRadius: BorderRadius.circular(12)),
-                    child: Center(
-                      child: Text(
-                        'Promjeni lozinku',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18
-                          ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),

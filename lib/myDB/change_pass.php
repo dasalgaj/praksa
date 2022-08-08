@@ -45,6 +45,9 @@ if ($count == 1){
                     $queryUpdate = sqlsrv_query($conn, $updateLozinke);
                     
                 }
+                else {
+                    $confirmNewPass = " * Lozinke se ne podudaraju";
+                }
 
             }
             else {

@@ -40,7 +40,7 @@ class _ChangePassPage extends State<ChangePassPage> {
   }
 
   Future promjeniLozinku() async {
-    var url = Uri.parse("http://192.168.5.12/promjena_lozinke.php");
+    var url = Uri.parse("http://192.168.5.15/promjena_lozinke.php");
     var response = await http.post(url, body: {
       "email" : widget.changeEmail,
       "newPassword" : newPasswordController.text.trim(),
@@ -90,6 +90,10 @@ class _ChangePassPage extends State<ChangePassPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.deepPurple,
+        elevation: 0,
+      ),
       backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(

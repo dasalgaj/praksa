@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:praksa_zadatak/api/google_signin_api.dart';
+import 'package:praksa_zadatak/google_main_page.dart';
 import 'package:praksa_zadatak/main_page.dart';
 import 'dart:convert';
 import 'register_page.dart';
-import 'otp_page.dart';
 import 'forgotPass_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -36,20 +38,8 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  Future<String> getMobitel() async {
-    var url = Uri.parse("http://192.168.5.14/get_data.php");
-    var response = await http.post(url, body: {
-      "email" : emailController.text,
-      "password" : passwordController.text,
-    });
-
-    var data = json.decode(response.body);
-
-    return data['Mobitel'];
-  }
-
   Future login() async {
-    var url = Uri.parse("http://192.168.5.14/prijava.php");
+    var url = Uri.parse("http://192.168.5.15/prijava.php");
     var response = await http.post(url, body: {
       "email" : emailController.text,
       "password" : passwordController.text,
@@ -64,16 +54,13 @@ class _LoginPageState extends State<LoginPage> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.green,
         textColor: Colors.white,
         fontSize: 16.0
       );
 
-      String brojMob = await getMobitel();
-
       FocusManager.instance.primaryFocus?.unfocus();
 
-      
       Navigator.push(context, MaterialPageRoute(builder: ((context) => MainPage(email: emailController.text.trim(), password: passwordController.text.trim()))));
     }
     else if (data == "Error") {
@@ -86,6 +73,20 @@ class _LoginPageState extends State<LoginPage> {
         textColor: Colors.white,
         fontSize: 16.0
       );
+    }
+  }
+
+  Future loginWithGoogle() async {
+    final user = await GoogleSignInApi.login();
+
+    if (user == null) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Sign in Failed')));
+    }
+    else {
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+      builder: (context) => GoogleMainPage(user: user)
+    ));
     }
   }
 
@@ -275,6 +276,26 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ],
+              ),
+
+              SizedBox(height: 20),
+
+              // google sign-in button
+              Padding(
+                padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: Colors.black,
+                    minimumSize: Size(double.infinity, 50),
+                  ),
+                  icon: FaIcon(
+                    FontAwesomeIcons.google,
+                    color: Colors.red,
+                  ),
+                  label: Text('Sign Up with Google'),
+                  onPressed:() => loginWithGoogle(),
+                  ),
               ),
           
             ]),
