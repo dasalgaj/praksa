@@ -60,7 +60,6 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       FocusManager.instance.primaryFocus?.unfocus();
-
       Navigator.push(context, MaterialPageRoute(builder: ((context) => MainPage(email: emailController.text.trim(), password: passwordController.text.trim()))));
     }
     else if (data == "Error") {
